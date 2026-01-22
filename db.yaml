@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otp-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otp-db
+  template:
+    metadata:
+      labels:
+        app: otp-db
+    spec:
+      containers:
+      - name: db
+        image: karthik26/otp-db:v2
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          value: otpdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: otp-db
+  ports:
+  - port: 5432
+    targetPort: 5432
