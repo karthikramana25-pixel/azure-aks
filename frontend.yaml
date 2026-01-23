@@ -24,11 +24,15 @@ kind: Service
 metadata:
   name: frontend
 spec:
-  type: NodePort   # change to LoadBalancer for cloud
+  type: NodePort
   selector:
     app: otp-frontend
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 80
-  - port: 443
+
+  - name: https
+    port: 443
     targetPort: 443
+
